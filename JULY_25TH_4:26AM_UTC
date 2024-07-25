@@ -1,0 +1,45 @@
+/*THIS SKETCH WAS FINISHED PROGRAMMING ON JULY 25TH AT 4:26AM UTC 
+AND IT WILL BE MODIFIED PARTLY OR COMPLETELY FOR PROGRESS TOWARDS 
+ITS FINAL VERSION WITH THE SUBSEQUENT FUTURE SKETCHES*/
+
+
+int relayPin = 18;
+int statusPin = 19;
+bool chargingCycle = true;
+
+void setup() {
+  pinMode(relayPin, OUTPUT);
+  pinMode(statusPin, INPUT);
+  Serial.begin(115200);
+  
+}
+
+void loop() {
+batteryIsntFullyCharged:
+
+ 
+
+  if (chargingCycle == true) {
+
+    digitalWrite(relayPin, HIGH);
+   
+    delay(1500);
+
+    digitalWrite(relayPin, LOW);
+   
+    delay(10);
+
+    if (estadoPin19 == LOW) {
+      chargingCycle = false;
+      goto batteryIsFullyCharged;
+    } else {
+      goto batteryIsntFullyCharged;
+    }
+  }
+
+batteryIsFullyCharged:
+ 
+  goto batteryIsFullyCharged;
+  /* this causes an infinite loop so the microcontroller stops charging the battery for its safety, which can only be
+stopped by resetting the microcontroller*/
+}
