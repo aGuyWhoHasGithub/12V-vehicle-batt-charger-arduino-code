@@ -1,3 +1,2 @@
-# 12V-vehicle-batt-charger-arduino-code
-In this repo ill uploading the sketches that ill be programming for my project for Hackclub
-Copyright © 2024 Franco Gonzalez Liotta. Todos los derechos reservados.
+# 12V-vehicle-batt-charger-arduino-code-HackClub
+Copyright © 2024 Franco Gonzalez Liotta. All rights reserved. Copyright applies to all files uploaded to this repository.
