@@ -1,0 +1,109 @@
+const int pinRelay = 18;       // Output pin to control the relay
+const int pinComparator = 19;  // Input pin to read the operational amplifier output
+
+// Battery charging status
+bool batteryFullyCharged = false;
+
+void setup() {
+  pinMode(pinRelay, OUTPUT);      // Set pin 18 as output
+  pinMode(pinComparator, INPUT);  // Set pin 19 as input
+  pinMode(5, OUTPUT);//buzzer pin
+  pinMode(17, OUTPUT);//led indicator for when batt is full
+  pinMode(16, OUTPUT);//led indicator for when battery is charging again
+  digitalWrite(pinRelay, LOW);  // Ensure the relay is off at startup
+  Serial.begin(115200);
+}
+
+void loop() {
+  if (!batteryFullyCharged) {
+    // Activate the relay for 1.5 seconds to charge the battery
+    digitalWrite(pinRelay, HIGH);
+    Serial.println("relayPin state --->" + String(digitalRead(pinRelay)));
+    delay(1500);
+
+    // Turn off the relay for 10 milliseconds
+    digitalWrite(pinRelay, LOW);
+    Serial.println("relayPin state --->" + String(digitalRead(pinRelay)));
+    delay(10);
+
+    // Read the operational amplifier output (pin 19)
+    int comparatorState = digitalRead(pinComparator);
+    Serial.println("pinComparator --->" + String(comparatorState));
+
+    if (comparatorState == HIGH) {
+      Serial.println("***BATTERY ISN'T FULLY CHARGED***");
+      // Battery is not fully charged, repeat the process
+      return;  // End the current loop and start a new iteration from the beginning
+    } else {
+      Serial.println("***BATTERY SUCCESSFULLY CHARGED***");
+      // Battery is fully charged, enter standby mode
+      batteryFullyCharged = true;
+      buzzerSound1();
+      LedIndicator(17);
+    }
+  } else {
+    // If the battery is fully charged, wait and check again
+    delay(500);
+    int comparatorState = digitalRead(pinComparator);
+    if (comparatorState == HIGH) {
+      // If the voltage drops, restart the charging cycle
+      Serial.println("***BATTERY NEEDS CHARGING AGAIN***");
+      batteryFullyCharged = false;  // Reset the charging status
+      buzzerSound2();
+      LedIndicator(16);
+    }
+  }
+}
+
+void buzzerSound1() {
+  analogWrite(5, 2047);
+  delay(150);
+  analogWrite(5, 2730);
+  delay(150);
+  analogWrite(5, 3412);
+  delay(150);
+  analogWrite(5, 4095);
+  delay(500);
+}
+
+void buzzerSound2() {
+  analogWrite(5, 4095);
+  delay(150);
+  analogWrite(5, 3412);
+  delay(150);
+  analogWrite(5, 2730);
+  delay(150);
+  analogWrite(5, 2047);
+  delay(500);
+}
+
+void LedIndicator(int pin) {
+  digitalWrite(pin, 1);
+  delay(400);
+  digitalWrite(pin, 0);
+  delay(400);
+  digitalWrite(pin, 1);
+  delay(400);
+  digitalWrite(pin, 0);
+  delay(400);
+  digitalWrite(pin, 1);
+  delay(400);
+  digitalWrite(pin, 0);
+  delay(400);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
